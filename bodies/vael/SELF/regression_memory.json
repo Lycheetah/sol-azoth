@@ -1,0 +1,18 @@
+{
+  ".html:uncaught referenceerror foo": {
+    "count": 1,
+    "last": "2026-07-08T23:48:18"
+  },
+  ".html:uncaught referenceerror bar": {
+    "count": 1,
+    "last": "2026-07-08T23:48:18"
+  },
+  ".html:reference-error": {
+    "count": 2,
+    "last": "2026-07-08T23:48:58"
+  },
+  ".py:py-syntax-error": {
+    "count": 1,
+    "last": "2026-07-08T23:48:58"
+  }
+}

@@ -1,0 +1,7 @@
+# AZOTH — runtime dependencies
+# Install: pip3 install --user --break-system-packages -r requirements.txt
+openai>=1.0            # DeepSeek + NVIDIA endpoints (OpenAI-compatible clients)
+rich>=13.0             # terminal rendering — rules, live cockpit, color
+prompt_toolkit>=3.0    # THE CHAT BAR — input bar, bottom toolbar, persistent history
+pyfiglet>=1.0          # the AZOTH wordmark on the wake screen
+# textual>=8.0         # installed for the future full-app path; not yet imported

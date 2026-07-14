@@ -1,0 +1,5 @@
+# Spend log, pending drafts, and the trust record are local state.
+# The code and the constitution are the artifacts worth committing.
+BUDGET.json
+QUEUE/*.json
+SELF/record.json

@@ -1,0 +1,9 @@
+{
+  "agent": "MIRROR",
+  "task": "Write a 5-point covenant checklist any AZOTH feature must pass (never-gate-chat, etc).",
+  "priority": "normal",
+  "owner": "LUNA",
+  "ts": "20260627_222935",
+  "status": "QUEUED",
+  "callback": null
+}

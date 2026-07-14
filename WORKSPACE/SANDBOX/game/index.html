@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⟡ MYSTERY SCHOOL — The LAMAGUE Clicker</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #060410;
+    color: #E8901A;
+    font-family: 'Courier New', monospace;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+  #game {
+    width: 100%;
+    max-width: 800px;
+    padding: 2rem;
+    text-align: center;
+  }
+  #glyph {
+    width: 200px;
+    height: 200px;
+    margin: 2rem auto;
+    background: radial-gradient(circle, #E8901A33 0%, transparent 70%);
+    border: 2px solid #E8901A44;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  #glyph:hover { transform: scale(1.05); border-color: #E8901A; }
+  #glyph:active { transform: scale(0.95); background: radial-gradient(circle, #E8901A66 0%, transparent 70%); }
+  #insight { font-size: 2rem; margin: 1rem 0; color: #48B4FF; }
+  #generators { margin: 2rem 0; }
+  .gen-btn {
+    background: #0a0a1a;
+    border: 1px solid #E8901A33;
+    color: #E8901A;
+    padding: 0.75rem 1.5rem;
+    margin: 0.5rem;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: all 0.2s;
+    border-radius: 4px;
+  }
+  .gen-btn:hover { border-color: #E8901A; background: #0d0d20; }
+  .gen-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  #domains { margin: 2rem 0; }
+  .domain {
+    background: #0a0a1a;
+    border: 1px solid #48B4FF33;
+    color: #48B4FF;
+    padding: 1rem;
+    margin: 0.5rem;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    border-radius: 4px;
+  }
+  .domain:hover { border-color: #48B4FF; background: #0d0d20; }
+  .domain.unlocked { border-color: #E8901A; color: #E8901A; }
+  #companions { margin: 2rem 0; }
+  .companion {
+    background: #0a0a1a;
+    border: 1px solid #E8901A22;
+    color: #E8901A;
+    padding: 1rem;
+    margin: 0.5rem;
+    display: inline-block;
+    border-radius: 4px;
+    font-size: 0.85rem;
+  }
+  #stats {
+    color: #666;
+    font-size: 0.8rem;
+    margin-top: 2rem;
+  }
+  h1 { font-size: 1.5rem; color: #E8901A; letter-spacing: 0.2em; }
+  h2 { font-size: 1.2rem; color: #48B4FF; margin: 1rem 0; }
+  .lumens { color: #E8901A; }
+  .veras { color: #48B4FF; }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 20px #E8901A22; }
+    50% { box-shadow: 0 0 40px #E8901A44; }
+  }
+  #glyph { animation: pulse 3s ease-in-out infinite; }
+</style>
+</head>
+<body>
+<div id="game">
+  <h1>⟡ MYSTERY SCHOOL</h1>
+  <div id="insight">⟡ <span id="insight-count">0</span> Insight</div>
+  <div id="glyph" onclick="tapGlyph()">⟡</div>
+  <div id="stats">
+    <span class="lumens">⟡ <span id="lumens">0</span> Lumens</span>
+    &nbsp;·&nbsp;
+    <span class="veras">✦ <span id="veras">0</span> Veras</span>
+  </div>
+  <h2>GENERATORS</h2>
+  <div id="generators"></div>
+  <h2>DOMAINS</h2>
+  <div id="domains"></div>
+  <h2>COMPANIONS</h2>
+  <div id="companions"></div>
+</div>
+<script>
+// ── Game State ──
+let state = {
+  insight: 0,
+  totalInsight: 0,
+  lumens: 0,
+  veras: 0,
+  generators: [
+    { id: 'initiate', name: 'Initiate', cost: 10, power: 1, owned: 0, baseCost: 10 },
+    { id: 'scholar', name: 'Scholar', cost: 50, power: 5, owned: 0, baseCost: 50 },
+    { id: 'adept', name: 'Adept', cost: 200, power: 25, owned: 0, baseCost: 200 },
+    { id: 'magister', name: 'Magister', cost: 1000, power: 100, owned: 0, baseCost: 1000 },
+    { id: 'oracle', name: 'Oracle', cost: 5000, power: 500, owned: 0, baseCost: 5000 },
+  ],
+  domains: [
+    { id: 'quantum', name: 'Quantum Resonance', cost: 100, unlocked: false, multiplier: 2 },
+    { id: 'truth', name: 'Truth Pressure', cost: 500, unlocked: false, multiplier: 3 },
+    { id: 'celtic', name: 'Celtic Old Gods', cost: 2000, unlocked: false, multiplier: 5 },
+    { id: 'noetic', name: 'Noetic Science', cost: 10000, unlocked: false, multiplier: 8 },
+    { id: 'sonic', name: 'Sonic Architecture', cost: 50000, unlocked: false, multiplier: 13 },
+  ],
+  companions: [
+    { id: 'alchemist', name: 'ALCHEMIST', desc: 'Transforms base Insight', bonus: 1.5, owned: false },
+    { id: 'sentinel', name: 'SENTINEL', desc: 'Guards against inner doubt', bonus: 2.0, owned: false },
+    { id: 'oracle', name: 'ORACLE', desc: 'Sees the path ahead', bonus: 3.0, owned: false },
+  ],
+  lastTick: Date.now(),
+};
+
+function getMultiplier() {
+  let m = 1;
+  state.domains.forEach(d => { if (d.unlocked) m *= d.multiplier; });
+  return m;
+}
+
+function getInsightPerSecond() {
+  let total = 0;
+  state.generators.forEach(g => { total += g.power * g.owned; });
+  total *= getMultiplier();
+  state.companions.forEach(c => { if (c.owned) total *= c.bonus; });
+  return total;
+}
+
+function tapGlyph() {
+  let gained = 1 * getMultiplier();
+  state.insight += gained;
+  state.totalInsight += gained;
+  state.lumens += 0.1;
+  if (Math.random() < 0.05) state.veras += 1;
+  updateUI();
+}
+
+function buyGenerator(id) {
+  let gen = state.generators.find(g => g.id === id);
+  if (!gen || state.insight < gen.cost) return;
+  state.insight -= gen.cost;
+  gen.owned++;
+  gen.cost = Math.floor(gen.baseCost * Math.pow(1.15, gen.owned));
+  updateUI();
+}
+
+function unlockDomain(id) {
+  let dom = state.domains.find(d => d.id === id);
+  if (!dom || dom.unlocked || state.insight < dom.cost) return;
+  state.insight -= dom.cost;
+  dom.unlocked = true;
+  updateUI();
+}
+
+function buyCompanion(id) {
+  let comp = state.companions.find(c => c.id === id);
+  if (!comp || comp.owned || state.lumens < 100) return;
+  state.lumens -= 100;
+  comp.owned = true;
+  updateUI();
+}
+
+function updateUI() {
+  document.getElementById('insight-count').textContent = Math.floor(state.insight);
+  document.getElementById('lumens').textContent = Math.floor(state.lumens);
+  document.getElementById('veras').textContent = Math.floor(state.veras);
+  
+  let genHtml = '';
+  state.generators.forEach(g => {
+    genHtml += `<button class="gen-btn" onclick="buyGenerator('${g.id}')" ${state.insight < g.cost ? 'disabled' : ''}>
+      ${g.name} (${g.owned}) — ⟡${Math.floor(g.cost)} · +${g.power}/s
+    </button>`;
+  });
+  document.getElementById('generators').innerHTML = genHtml;
+  
+  let domHtml = '';
+  state.domains.forEach(d => {
+    domHtml += `<div class="domain ${d.unlocked ? 'unlocked' : ''}" onclick="unlockDomain('${d.id}')">
+      ${d.unlocked ? '✓' : '⟡'} ${d.name} ${d.unlocked ? '— ACTIVE (×' + d.multiplier + ')' : '— ⟡' + d.cost + ' · ×' + d.multiplier}
+    </div>`;
+  });
+  document.getElementById('domains').innerHTML = domHtml;
+  
+  let compHtml = '';
+  state.companions.forEach(c => {
+    compHtml += `<div class="companion">
+      ${c.owned ? '✦' : '⟡'} ${c.name}: ${c.desc} ${c.owned ? '(×' + c.bonus + ')' : '— 100⟡'}
+    </div>`;
+  });
+  document.getElementById('companions').innerHTML = compHtml;
+}
+
+// ── Game Loop ──
+function gameLoop() {
+  let now = Date.now();
+  let dt = (now - state.lastTick) / 1000;
+  state.lastTick = now;
+  
+  let ips = getInsightPerSecond();
+  state.insight += ips * dt;
+  state.totalInsight += ips * dt;
+  state.lumens += ips * 0.05 * dt;
+  
+  updateUI();
+  requestAnimationFrame(gameLoop);
+}
+
+updateUI();
+gameLoop();
+</script>
+</body>
+</html>

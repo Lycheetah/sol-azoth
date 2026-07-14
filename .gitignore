@@ -1,0 +1,18 @@
+__pycache__/
+*.pyc
+venv/
+.env
+SELF/memory/*.md
+sessions/
+crashes/
+snapshots/
+WORKSPACE/scratch.md
+
+# Anthropic source dump — never track
+all_tools_content.txt
+lunasandsoltoolskills/
+WORKSPACE/.verify_captures/
+
+# downloaded binaries — never belong in git
+WORKSPACE/tools/Godot_v4.3-stable_linux.x86_64
+WORKSPACE/tools/godot.zip

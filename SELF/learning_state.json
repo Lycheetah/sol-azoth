@@ -1,0 +1,47 @@
+{
+ "deep": {
+  "ratelimits": [
+   1782557819.9734707
+  ],
+  "failures": 8,
+  "successes": 2538
+ },
+ "gpt20": {
+  "ratelimits": [],
+  "failures": 0,
+  "successes": 8
+ },
+ "r1": {
+  "ratelimits": [],
+  "failures": 0,
+  "successes": 9
+ },
+ "gpt120": {
+  "ratelimits": [],
+  "failures": 3,
+  "successes": 117
+ },
+ "qwen": {
+  "ratelimits": [],
+  "failures": 1,
+  "successes": 9
+ },
+ "minimax": {
+  "ratelimits": [],
+  "failures": 1,
+  "successes": 9
+ },
+ "lite": {
+  "ratelimits": [
+   1783399097.685395,
+   1783399108.8645868
+  ],
+  "failures": 1,
+  "successes": 0
+ },
+ "flash": {
+  "ratelimits": [],
+  "failures": 0,
+  "successes": 414
+ }
+}

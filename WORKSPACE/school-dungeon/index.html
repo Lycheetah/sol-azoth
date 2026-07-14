@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Long Light — School Dungeon</title>
+  <link rel="stylesheet" href="css/game.css" />
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
+</head>
+<body>
+
+  <!-- ═══ DARKENING SCREEN (fades out on load) ═══ -->
+  <div id="darkening" style="
+    position: fixed; inset: 0; z-index: 9999;
+    background: #0a0808;
+    display: flex; align-items: center; justify-content: center;
+    transition: opacity 1.5s ease;
+  ">
+    <div style="text-align: center; font-family: 'Space Mono', monospace;">
+      <div style="font-size: 48px; color: #f0c040; margin-bottom: 16px;">⟡</div>
+      <div style="font-size: 14px; color: #f0c040; letter-spacing: 6px; text-transform: uppercase;">The Long Light</div>
+      <div style="font-size: 10px; color: #888080; margin-top: 8px; letter-spacing: 3px;">School Dungeon · Forging...</div>
+    </div>
+  </div>
+
+  <!-- ═══ MAIN FRAME ═══ -->
+  <div id="frame">
+    <header id="top">
+      <div class="brand">
+        <span class="glyph">⟡</span>
+        <div>
+          <h1>The Long Light</h1>
+          <p>School Dungeon · Nigredo — Hall of Glyphs</p>
+        </div>
+      </div>
+      <div id="hud-stats">
+        <span id="hp-label">WILL 100</span>
+        <span id="xp-label">XP 0</span>
+        <span id="floor-label">FLOOR 1</span>
+      </div>
+    </header>
+
+    <div id="game-wrap">
+      <div id="game"></div>
+      <aside id="panel">
+        <h2>Seeker</h2>
+        <p class="flavor" id="flavor">The Hall is dark. The first glyph waits.</p>
+
+        <h2>Glyph Skills</h2>
+        <div class="skills">
+          <div class="skill" data-k="1"><kbd>1</kbd> MEASURE <span class="cd" id="cd1"></span></div>
+          <div class="skill" data-k="2"><kbd>2</kbd> COMPRESS <span class="cd" id="cd2"></span></div>
+          <div class="skill" data-k="3"><kbd>3</kbd> TRANSMUTE <span class="cd" id="cd3"></span></div>
+          <div class="skill" data-k="4"><kbd>4</kbd> BREAK <span class="cd" id="cd4"></span></div>
+        </div>
+
+        <h2>Controls</h2>
+        <ul class="controls">
+          <li><kbd>WASD</kbd> / <kbd>Arrows</kbd> move</li>
+          <li><kbd>Click</kbd> / <kbd>Space</kbd> attack</li>
+          <li><kbd>1–4</kbd> glyph skills</li>
+          <li><kbd>E</kbd> interact (shrine / stairs)</li>
+        </ul>
+
+        <h2>Companion</h2>
+        <p class="companion" id="companion-line">⊚ "The light grows. I walk with you."</p>
+        <p class="hint">Rest anytime. Nothing wilts in your absence.</p>
+      </aside>
+    </div>
+
+    <footer id="log" aria-live="polite">⟡ Entering the Hall of Glyphs...</footer>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+  <script>
+    // Fade out darkening screen after boot
+    setTimeout(() => {
+      const d = document.getElementById('darkening');
+      if (d) d.style.opacity = '0';
+      setTimeout(() => { if (d) d.remove(); }, 1500);
+    }, 800);
+  </script>
+</body>
+</html>

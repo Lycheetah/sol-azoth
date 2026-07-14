@@ -1,0 +1,2 @@
+TASK: Write a Python script that prints the Fibonacci sequence
+MAX_STEPS: 12

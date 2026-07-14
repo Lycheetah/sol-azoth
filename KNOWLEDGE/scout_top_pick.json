@@ -1,0 +1,8 @@
+{
+  "key": "llama-3.3-70b-instruct",
+  "model": "meta/llama-3.3-70b-instruct",
+  "score": 164.96,
+  "tps": 49.6,
+  "lamague": 6.0,
+  "ts": "2026-07-09T07:01:11.322269"
+}

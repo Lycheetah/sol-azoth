@@ -1,0 +1,4 @@
+# Sample LAMAGUE program
+@print txt<"Hello, world!">
+var x = num<5>
+@print txt<"Value of x:"} num<10>

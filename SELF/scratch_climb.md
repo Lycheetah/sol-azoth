@@ -1,0 +1,1 @@
+I am beginning the 54-rung climb on Sat 27 Jun 2026 01:38:20 NZST. Iterations 2-3 exist on disk AWAITING_SOL. Iterations 4-9 have phantom AWAITING_SOL with zero artifacts. I build real artifacts from 4 upward.

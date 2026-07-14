@@ -1,0 +1,91 @@
+{
+  "llama-3.3-nemotron-super-49b-v1.5": {
+    "model": "nvidia/llama-3.3-nemotron-super-49b-v1.5",
+    "slug": "llama-3.3-nemotron-super-49b-v1.5",
+    "ts": "2026-06-28T16:23:53.128426",
+    "available": true,
+    "ping_reply": "",
+    "tokens_per_sec": 19.8,
+    "max_ctx_tested": 128000,
+    "lamague_response": "",
+    "lamague_score": 0
+  },
+  "llama-3.1-nemotron-ultra-253b-v1": {
+    "model": "nvidia/llama-3.1-nemotron-ultra-253b-v1",
+    "slug": "llama-3.1-nemotron-ultra-253b-v1",
+    "ts": "2026-06-28T16:24:59.504371",
+    "available": false,
+    "error": "Error code: 404 - {'status': 404, 'title': 'Not Found', 'detail': \"Function '84bf12ff-edbd-4435-baea-0fa6a7453d2e': Not "
+  },
+  "llama-3.3-70b-instruct": {
+    "model": "meta/llama-3.3-70b-instruct",
+    "slug": "llama-3.3-70b-instruct",
+    "ts": "2026-06-28T16:24:59.889420",
+    "available": true,
+    "ping_reply": "OK",
+    "tokens_per_sec": 49.6,
+    "max_ctx_tested": 128000,
+    "lamague_response": "The \u25c8 symbol in LAMAGUE grammar represents a diamond operator, indicating that the statement it precedes is possibly true. In a truth-pressure expression, \u25c8 would be used as \u25c8p to express that it is possible that p is true, where p is a proposition.",
+    "lamague_score": 6
+  },
+  "llama-3.1-8b-instruct": {
+    "model": "meta/llama-3.1-8b-instruct",
+    "slug": "llama-3.1-8b-instruct",
+    "ts": "2026-06-28T16:27:09.245855",
+    "available": true,
+    "ping_reply": "OK. Is there somethi",
+    "tokens_per_sec": 61.1,
+    "max_ctx_tested": 128000,
+    "lamague_response": "In the LAMAGUE grammar, the \u25c8 symbol represents the \"nand\" operator, which is a binary operator that returns true only when at least one of its operands is false.\n\nTo use the \u25c8 symbol in a truth-pressure expression, you would write it as a binary operator between two operands, for example: A \u25c8 B, wh",
+    "lamague_score": 5
+  },
+  "llama-3.1-405b-instruct": {
+    "model": "meta/llama-3.1-405b-instruct",
+    "slug": "llama-3.1-405b-instruct",
+    "ts": "2026-06-28T16:27:21.637149",
+    "available": false,
+    "error": "404 page not found"
+  },
+  "mistral-large-2-instruct": {
+    "model": "mistralai/mistral-large-2-instruct",
+    "slug": "mistral-large-2-instruct",
+    "ts": "2026-06-28T16:27:21.918313",
+    "available": false,
+    "error": "Error code: 404 - {'status': 404, 'title': 'Not Found', 'detail': \"Function '7fadd4de-e22a-48e4-90e9-f02ef14a74b9': Not "
+  },
+  "mixtral-8x22b-instruct-v0.1": {
+    "model": "mistralai/mixtral-8x22b-instruct-v0.1",
+    "slug": "mixtral-8x22b-instruct-v0.1",
+    "ts": "2026-06-28T16:27:22.137557",
+    "available": false,
+    "error": "Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': \"The model 'mistralai/mixtral-8x22b-"
+  },
+  "gemma-3-27b-it": {
+    "model": "google/gemma-3-27b-it",
+    "slug": "gemma-3-27b-it",
+    "ts": "2026-06-28T16:27:22.318762",
+    "available": false,
+    "error": "Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': \"The model 'google/gemma-3-27b-it' h"
+  },
+  "deepseek-r1": {
+    "model": "deepseek-ai/deepseek-r1",
+    "slug": "deepseek-r1",
+    "ts": "2026-06-28T16:27:22.526970",
+    "available": false,
+    "error": "404 page not found"
+  },
+  "qwen3-235b-a22b": {
+    "model": "qwen/qwen3-235b-a22b",
+    "slug": "qwen3-235b-a22b",
+    "ts": "2026-06-28T16:27:22.732750",
+    "available": false,
+    "error": "404 page not found"
+  },
+  "nemotron-4-340b-instruct": {
+    "model": "nvidia/nemotron-4-340b-instruct",
+    "slug": "nemotron-4-340b-instruct",
+    "ts": "2026-06-28T16:27:22.936819",
+    "available": false,
+    "error": "Error code: 404 - {'status': 404, 'title': 'Not Found', 'detail': \"Function 'b0fcd392-e905-4ab4-8eb9-aeae95c30b37': Not "
+  }
+}

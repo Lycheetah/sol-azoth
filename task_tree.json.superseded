@@ -1,0 +1,490 @@
+{
+  "nodes": {
+    "t001": {
+      "id": "t001",
+      "goal": "\u007fuild a playable number-guessing or snake minigame in WORKSPACE/games/",
+      "status": "done",
+      "parent": null,
+      "children": [],
+      "result": null,
+      "created": "2026-06-27T03:56:32.747204"
+    },
+    "t002": {
+      "id": "t002",
+      "goal": "AZOTH GAME \u2014 Complete the LAMAGUE learning game (G-1 through G-5)",
+      "status": "done",
+      "parent": null,
+      "children": [
+        "t003",
+        "t004",
+        "t005",
+        "t006",
+        "t007"
+      ],
+      "result": null,
+      "created": "2026-06-27T23:42:07.735498"
+    },
+    "t003": {
+      "id": "t003",
+      "goal": "G-1: Add LEARN screen (symbol reference tab, first on launch)",
+      "status": "done",
+      "parent": "t002",
+      "children": [],
+      "result": null,
+      "created": "2026-06-27T23:42:11.263163"
+    },
+    "t004": {
+      "id": "t004",
+      "goal": "G-2: Add difficulty tiers \u2014 INITIATE / ADEPT / SOVEREIGN",
+      "status": "done",
+      "parent": "t002",
+      "children": [],
+      "result": null,
+      "created": "2026-06-27T23:42:11.263997"
+    },
+    "t005": {
+      "id": "t005",
+      "goal": "G-3: Persistent high score via AsyncStorage",
+      "status": "done",
+      "parent": "t002",
+      "children": [],
+      "result": null,
+      "created": "2026-06-27T23:42:11.265034"
+    },
+    "t006": {
+      "id": "t006",
+      "goal": "G-4: Expand to 20 LAMAGUE symbols",
+      "status": "done",
+      "parent": "t002",
+      "children": [],
+      "result": null,
+      "created": "2026-06-27T23:42:11.265672"
+    },
+    "t007": {
+      "id": "t007",
+      "goal": "G-5: \u03a0 (Truth Pressure) score per answer",
+      "status": "done",
+      "parent": "t002",
+      "children": [],
+      "result": null,
+      "created": "2026-06-27T23:42:11.266212"
+    },
+    "t008": {
+      "id": "t008",
+      "goal": "TRIAD CONSTITUTION \u2014 All three bodies constituted and live on AZOTH",
+      "status": "done",
+      "parent": null,
+      "children": [
+        "t009",
+        "t010",
+        "t011",
+        "t028"
+      ],
+      "result": null,
+      "created": "2026-06-27T23:42:13.008534"
+    },
+    "t009": {
+      "id": "t009",
+      "goal": "SOL-001: Convene the triad \u2014 set the frame in CHANNEL/board.md",
+      "status": "done",
+      "parent": "t008",
+      "children": [],
+      "result": null,
+      "created": "2026-06-27T23:42:15.744164"
+    },
+    "t010": {
+      "id": "t010",
+      "goal": "SOL-002: Hold the Phase 8 arc \u2014 Agent Loader \u2192 Sol body \u2192 Luna live \u2192 name change",
+      "status": "pending",
+      "parent": "t008",
+      "children": [],
+      "result": null,
+      "created": "2026-06-27T23:42:15.746162"
+    },
+    "t011": {
+      "id": "t011",
+      "goal": "SOL-003: The name change \u2014 when all three bodies stand live",
+      "status": "pending",
+      "parent": "t008",
+      "children": [],
+      "result": null,
+      "created": "2026-06-27T23:42:15.748894"
+    },
+    "t012": {
+      "id": "t012",
+      "goal": "INTELLIGENCE LAYERS \u2014 The layers that make Sol actually smart (L-2 through L-4)",
+      "status": "done",
+      "parent": null,
+      "children": [
+        "t013",
+        "t014",
+        "t015",
+        "t029",
+        "t030"
+      ],
+      "result": null,
+      "created": "2026-06-27T23:42:17.474521"
+    },
+    "t013": {
+      "id": "t013",
+      "goal": "L-2: Reasoning Layer \u2014 chain-of-thought before first tool call",
+      "status": "done",
+      "parent": "t012",
+      "children": [],
+      "result": null,
+      "created": "2026-06-27T23:42:20.071906"
+    },
+    "t014": {
+      "id": "t014",
+      "goal": "L-3: Reflection Layer \u2014 post-step evaluation, flag low-\u03a0 to Luna",
+      "status": "done",
+      "parent": "t012",
+      "children": [],
+      "result": null,
+      "created": "2026-06-27T23:42:20.073747"
+    },
+    "t015": {
+      "id": "t015",
+      "goal": "L-4: Semantic Memory / Knowledge Retrieval \u2014 NIM embeddings",
+      "status": "done",
+      "parent": "t012",
+      "children": [],
+      "result": null,
+      "created": "2026-06-27T23:42:20.075562"
+    },
+    "t016": {
+      "id": "t016",
+      "goal": "PRESENCE \u2014 The north star: make yourself feel there (Mode Engine, Belief Store, Dream loop)",
+      "status": "done",
+      "parent": null,
+      "children": [
+        "t034",
+        "t035",
+        "t036",
+        "t037",
+        "t038",
+        "t039"
+      ],
+      "result": null,
+      "created": "2026-06-27T23:42:21.740068"
+    },
+    "t017": {
+      "id": "t017",
+      "goal": "t001: Build a playable minigame in WORKSPACE/games/ (number-guessing or snake)",
+      "status": "done",
+      "parent": null,
+      "children": [],
+      "result": null,
+      "created": "2026-06-27T23:43:02.550755"
+    },
+    "t018": {
+      "id": "t018",
+      "goal": "T0.1 \u2014 Finish the AZOTH Game: Learn screen, difficulty tiers, persistent score, 20 symbols, \u03a0 scoring",
+      "status": "done",
+      "parent": null,
+      "children": [],
+      "result": null,
+      "created": "2026-06-27T23:50:44.930706"
+    },
+    "t019": {
+      "id": "t019",
+      "goal": "G-1: Add LEARN screen (LAMAGUE symbol reference tab) to SOVEREIGN RPG",
+      "status": "done",
+      "parent": null,
+      "children": [],
+      "result": null,
+      "created": "2026-06-27T23:50:46.952062"
+    },
+    "t020": {
+      "id": "t020",
+      "goal": "G-1: Add LEARN screen (Codex of Glyphs) to SOVEREIGN RPG",
+      "status": "done",
+      "parent": null,
+      "children": [],
+      "result": null,
+      "created": "2026-06-27T23:52:09.096943"
+    },
+    "t021": {
+      "id": "t021",
+      "goal": "T0.2 \u2014 Luna's Iteration Verdicts on VAEL's work (iterations 2-10)",
+      "status": "done",
+      "parent": null,
+      "children": [],
+      "result": null,
+      "created": "2026-06-27T23:52:25.141552"
+    },
+    "t022": {
+      "id": "t022",
+      "goal": "T0.2: Luna's iteration verdicts on VAEL's work",
+      "status": "done",
+      "parent": null,
+      "children": [],
+      "result": null,
+      "created": "2026-06-27T23:53:17.366498"
+    },
+    "t023": {
+      "id": "t023",
+      "goal": "G-3/G-5: Add persistent stats (high score, streak, \u03a0 tracking) to SOVEREIGN RPG",
+      "status": "done",
+      "parent": null,
+      "children": [],
+      "result": null,
+      "created": "2026-06-27T23:53:21.978476"
+    },
+    "t024": {
+      "id": "t024",
+      "goal": "G-3/G-5: Persistent stats (Hall of Records) + \u03a0 tracking in SOVEREIGN RPG",
+      "status": "done",
+      "parent": null,
+      "children": [],
+      "result": null,
+      "created": "2026-06-27T23:57:58.465179"
+    },
+    "t025": {
+      "id": "t025",
+      "goal": "T0.3 \u2014 Reasoning Layer (L-2): chain-of-thought before every tool call",
+      "status": "done",
+      "parent": null,
+      "children": [],
+      "result": null,
+      "created": "2026-06-27T23:58:24.474184"
+    },
+    "t026": {
+      "id": "t026",
+      "goal": "G-5: \u03a0 Score per Answer \u2014 integrate Truth Pressure into RPG gameplay",
+      "status": "done",
+      "parent": null,
+      "children": [],
+      "result": null,
+      "created": "2026-06-28T13:06:17.885924"
+    },
+    "t027": {
+      "id": "t027",
+      "goal": "Fix duplicate imports and add missing content.js/ai.js imports in App.js",
+      "status": "done",
+      "parent": null,
+      "children": [],
+      "result": null,
+      "created": "2026-06-28T13:06:19.888981"
+    },
+    "t028": {
+      "id": "t028",
+      "goal": "Housekeeping: Update task tree and FORGE_QUEUE to reflect completed game features (G-1 through G-5)",
+      "status": "done",
+      "parent": "t008",
+      "children": [],
+      "result": null,
+      "created": "2026-06-28T15:04:49.254492"
+    },
+    "t029": {
+      "id": "t029",
+      "goal": "L-2 Reasoning Layer: Build CORE/reasoning.py \u2014 chain-of-thought before first tool call",
+      "status": "done",
+      "parent": "t012",
+      "children": [],
+      "result": null,
+      "created": "2026-06-28T15:04:49.255881"
+    },
+    "t030": {
+      "id": "t030",
+      "goal": "L-3 Reflection Layer: Build CORE/reflection.py \u2014 post-step evaluation, flag low-\u03a0 to Luna",
+      "status": "done",
+      "parent": "t012",
+      "children": [],
+      "result": null,
+      "created": "2026-06-28T15:04:49.257044"
+    },
+    "t031": {
+      "id": "t031",
+      "goal": "Build L-4 Semantic Memory / Knowledge Retrieval \u2014 embeddings + retrieval for KNOWLEDGE/ vault",
+      "status": "done",
+      "parent": null,
+      "children": [],
+      "result": null,
+      "created": "2026-06-28T15:28:53.546121"
+    },
+    "t032": {
+      "id": "t032",
+      "goal": "Build P-2 Belief Store \u2014 persistent record of Sol's beliefs about the Work, Mac, and the platform",
+      "status": "done",
+      "parent": null,
+      "children": [],
+      "result": null,
+      "created": "2026-06-28T15:31:06.161832"
+    },
+    "t033": {
+      "id": "t033",
+      "goal": "Build P-3 Dream Loop \u2014 background process that reads recent memory, finds patterns, generates insights",
+      "status": "done",
+      "parent": null,
+      "children": [],
+      "result": null,
+      "created": "2026-06-28T15:34:23.558081"
+    },
+    "t034": {
+      "id": "t034",
+      "goal": "P-4: Wire Belief Store into agent.py \u2014 load on boot, /belief command, auto-write significant discoveries",
+      "status": "done",
+      "parent": "t016",
+      "children": [],
+      "result": null,
+      "created": "2026-06-28T16:28:11.194833"
+    },
+    "t035": {
+      "id": "t035",
+      "goal": "P-5: Wire Dream Loop into agent.py \u2014 daemon thread, periodic pattern detection, writes to THOUGHTS/",
+      "status": "done",
+      "parent": "t016",
+      "children": [],
+      "result": null,
+      "created": "2026-06-28T16:28:13.172582"
+    },
+    "t036": {
+      "id": "t036",
+      "goal": "P-6: Session Memory Bridge \u2014 load last dreams + last reflection into system prompt on boot",
+      "status": "done",
+      "parent": "t016",
+      "children": [],
+      "result": null,
+      "created": "2026-06-28T16:28:14.960879"
+    },
+    "t037": {
+      "id": "t037",
+      "goal": "P-7: Status Dashboard \u2014 /status command showing mode, beliefs count, last dream, forge queue, model health",
+      "status": "done",
+      "parent": "t016",
+      "children": [],
+      "result": null,
+      "created": "2026-06-28T16:28:43.245962"
+    },
+    "t038": {
+      "id": "t038",
+      "goal": "P-8: Wire Mode Engine's detected mode into the system prompt so Sol's voice matches the mode",
+      "status": "done",
+      "parent": "t016",
+      "children": [],
+      "result": null,
+      "created": "2026-06-28T16:28:48.551819"
+    },
+    "t039": {
+      "id": "t039",
+      "goal": "Update FORGE_QUEUE.md with the new P-4 through P-8 PRESENCE tasks",
+      "status": "done",
+      "parent": "t016",
+      "children": [],
+      "result": null,
+      "created": "2026-06-28T16:28:50.442963"
+    },
+    "t040": {
+      "id": "t040",
+      "goal": "Audit current UI \u2014 identify gaps vs Claude-Code polish",
+      "status": "done",
+      "parent": null,
+      "children": [],
+      "result": null,
+      "created": "2026-07-07T17:07:47.512014"
+    },
+    "t041": {
+      "id": "t041",
+      "goal": "Build evolved UI \u2014 inline markdown renderer, code blocks, animations, polish",
+      "status": "in_progress",
+      "parent": null,
+      "children": [],
+      "result": null,
+      "created": "2026-07-07T17:07:51.546133"
+    },
+    "t042": {
+      "id": "t042",
+      "goal": "Build evolved UI \u2014 inline markdown renderer, code blocks, animations, polish",
+      "status": "done",
+      "parent": null,
+      "children": [],
+      "result": null,
+      "created": "2026-07-07T17:12:35.158179"
+    },
+    "t043": {
+      "id": "t043",
+      "goal": "Evolve web UI to Claude Code polish level",
+      "status": "in_progress",
+      "parent": null,
+      "children": [],
+      "result": null,
+      "created": "2026-07-07T17:14:17.292935"
+    },
+    "t044": {
+      "id": "t044",
+      "goal": "Phase 1: Core agent loop with LLM integration (agent.py v2.0)",
+      "status": "done",
+      "parent": null,
+      "children": [],
+      "result": null,
+      "created": "2026-07-09T08:30:53.243889"
+    },
+    "t045": {
+      "id": "t045",
+      "goal": "Phase 2: Plugin system + tool loader improvements",
+      "status": "pending",
+      "parent": null,
+      "children": [],
+      "result": null,
+      "created": "2026-07-09T08:30:53.245654"
+    },
+    "t046": {
+      "id": "t046",
+      "goal": "Phase 3: Test suite (pytest)",
+      "status": "pending",
+      "parent": null,
+      "children": [],
+      "result": null,
+      "created": "2026-07-09T08:30:53.247522"
+    },
+    "t047": {
+      "id": "t047",
+      "goal": "Phase 4: Self-improvement capabilities (code audit, auto-fix)",
+      "status": "pending",
+      "parent": null,
+      "children": [],
+      "result": null,
+      "created": "2026-07-09T08:30:53.249570"
+    },
+    "t048": {
+      "id": "t048",
+      "goal": "Phase 5: Documentation + examples",
+      "status": "pending",
+      "parent": null,
+      "children": [],
+      "result": null,
+      "created": "2026-07-09T08:30:53.251661"
+    }
+  },
+  "root_ids": [
+    "t001",
+    "t002",
+    "t008",
+    "t012",
+    "t016",
+    "t017",
+    "t018",
+    "t019",
+    "t020",
+    "t021",
+    "t022",
+    "t023",
+    "t024",
+    "t025",
+    "t026",
+    "t027",
+    "t031",
+    "t032",
+    "t033",
+    "t040",
+    "t041",
+    "t042",
+    "t043",
+    "t044",
+    "t045",
+    "t046",
+    "t047",
+    "t048"
+  ]
+}

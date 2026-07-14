@@ -1,0 +1,1 @@
+# AZOTH capability test suite

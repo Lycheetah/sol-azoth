@@ -1,0 +1,3 @@
+QUESTION: "it isnt there check" — do you want me to create tools/tool_loader.py, or was confirming its absence sufficient?
+
+Waiting for Mac's answer...

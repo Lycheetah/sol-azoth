@@ -1,0 +1,16 @@
+#!/bin/bash
+# 999agent -- terminal launch command
+# Usage: 999agent [options]
+
+SCRIPT_SRC="${BASH_SOURCE[0]}"
+while [ -h "$SCRIPT_SRC" ]; do
+    SCRIPT_DIR="$(cd -P "$(dirname "$SCRIPT_SRC")" && pwd)"
+    SCRIPT_SRC="$(readlink "$SCRIPT_SRC")"
+    [[ "$SCRIPT_SRC" != /* ]] && SCRIPT_SRC="$SCRIPT_DIR/$SCRIPT_SRC"
+done
+SCRIPT_DIR="$(cd -P "$(dirname "$SCRIPT_SRC")" && pwd)"
+
+cd "$SCRIPT_DIR" || exit 1
+999AGENT_HOME="$SCRIPT_DIR"
+export 999AGENT_HOME
+exec python3 "$SCRIPT_DIR/agent.py" "$@"

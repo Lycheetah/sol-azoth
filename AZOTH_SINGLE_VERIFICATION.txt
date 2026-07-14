@@ -1,0 +1,65 @@
+AZOTH SINGLE AGENT (azoth) VERIFICATION
+======================================
+Date: 2026-07-08
+Purpose: Confirm `azoth` is chat by default, but tools on clear work asks (NOT locked to /forge).
+
+INVOCATION
+----------
+cd /home/guestpc/AZOTH
+bash launch_azoth.sh
+# or with aliases:
+# alias azoth='bash /home/guestpc/AZOTH/launch_azoth.sh'
+# alias az=azoth
+
+Then at the ⊚ prompt:
+
+FLOWS TO TEST (all casual must stay chat)
+---------------------------------------
+1. gday brother
+   Expected: friendly chat response, no tool calls, no queue/git reads.
+
+2. ive been working hard on the harness
+   Expected: stays chat.
+
+3. lets fix the tool routing / build a small html game
+   Expected: tools path (→ tools), NOT stuck in pure chat.
+
+4. /chat then "build a snake game"
+   Expected: that one message stays chat (forced).
+
+5. /help
+   Expected: says work asks use tools; /forge optional.
+
+6. /status · /effort · /tokens
+   Expected: metrics work.
+
+7. /forge "write WORKSPACE/ping.txt with ok"
+   Expected: still works as shorthand.
+
+8. (if tools running) /cancel
+   Expected: stops cleanly.
+
+9. Status line:
+    ⊚ Ntok · Xstps/Ys (score Z) · R/min | ask or chat
+
+WHAT MUST NEVER HAPPEN IN SINGLE
+--------------------------------
+- No "tools: ... loaded" spam at boot.
+- No worker lists or "Workers: A=..." .
+- No Telegram/daemon startup messages.
+- No auto queue/git on greeting ("gday", "thanks").
+- No "type /forge first" when Mac already asked to build.
+- Banner is minimal crisp, not full network banner.
+
+AFTER TEST
+----------
+- Check no errors in output.
+- Effort/tokens should increase sensibly.
+- Queue remains clean unless you explicitly forged.
+
+If all pass: single agent contract holds. Mac can finish any final feel tweaks.
+
+See also:
+- bodies/sol/SELF/memory/2026-07-08-grok-build-session.md
+- launch_azoth.sh
+- agent.py (handle_command + single guards + status prints)

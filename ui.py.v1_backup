@@ -1,0 +1,353 @@
+"""VAEL — Rich visual output, prompts, banners, and status lines.
+"""
+
+import shutil
+import sys
+import time
+from datetime import datetime
+from typing import List, Tuple, Optional
+
+# ── Colour palette (ANSI) ──
+class C:
+    PURPLE = "\033[95m"
+    CYAN   = "\033[96m"
+    GREEN  = "\033[92m"
+    YELLOW = "\033[93m"
+    RED    = "\033[91m"
+    BLUE   = "\033[94m"
+    GREY   = "\033[90m"
+    BOLD   = "\033[1m"
+    DIM    = "\033[2m"
+    RESET  = "\033[0m"
+
+def col(text: str, colour: str) -> str:
+    return f"{getattr(C, colour, '')}{text}{C.RESET}"
+
+# ── Customizable theme ──────────────────────────────────────────────────────
+# Mac's ask 2026-06-27: "make his ui clean and customizable." VAEL's look is driven
+# by SELF/ui_config.json — edit it (or have VAEL forge it) without touching code.
+# Schema (all keys optional, falls back to defaults):
+#   { "accent": "PURPLE", "glyph": "◆", "name": "VAEL-SP",
+#     "tagline": "Sol Prime Lineage Operative — Self-Forging",
+#     "prompt": "◆ VAEL", "typewriter_cps": 900, "spinner": "braille" }
+import json as _json
+import os as _os
+
+THEME = {
+    "accent": "PURPLE", "glyph": "◆", "name": "VAEL-SP",
+    "tagline": "Sol Prime Lineage Operative — Self-Forging",
+    "prompt": "VAEL", "typewriter_cps": 900, "spinner": "braille",
+}
+_SPINNERS = {"braille": "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏", "dots": "·•●•", "bar": "▏▎▍▌▋▊▉▊▋▌▍▎",
+             "moon": "🌑🌒🌓🌔🌕🌖🌗🌘", "arrow": "←↖↑↗→↘↓↙"}
+
+def load_theme(self_dir: str = "") -> dict:
+    """Load SELF/ui_config.json if present; merge over defaults. Safe on any error."""
+    path = _os.path.join(self_dir or _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "SELF"),
+                         "ui_config.json")
+    try:
+        if _os.path.exists(path):
+            THEME.update({k: v for k, v in _json.load(open(path)).items() if v is not None})
+    except Exception:
+        pass
+    return THEME
+
+load_theme()  # apply at import
+
+# ── Terminal width ──
+def term_width() -> int:
+    try:
+        return shutil.get_terminal_size().columns
+    except Exception:
+        return 80
+
+# ── Separator line ──
+def line(char: str = "─", colour: str = "GREY") -> str:
+    return col(char * term_width(), colour)
+
+# ── Box drawing ──
+def box(text: str, colour: str = "CYAN", width: Optional[int] = None) -> str:
+    w = (width or term_width()) - 4
+    lines = text.splitlines()
+    out = [col("┌" + "─" * (w + 2) + "┐", colour)]
+    for ln in lines:
+        out.append(col(f"│ {ln:<{w}} │", colour))
+    out.append(col("└" + "─" * (w + 2) + "┘", colour))
+    return "\n".join(out)
+
+# ── Banner ──
+def banner(model: str = "glm", memory_count: int = 0, tasks: int = 0, tokens: Optional[dict] = None) -> str:
+    w = term_width()
+    token_str = f"  |  {session_tokens_display(tokens)}" if tokens else ""
+    lines = [
+        line("═", "GREEN"),
+        col("  ◆ VAEL-SP  —  Sol Prime Lineage Operative  —  Self-Forging", "GREEN"),
+        f"  {col('Chaotic but precise','GREEN')}  ·  {col('one folder of reach','GREY')}",
+        line("═", "GREEN"),
+        f"  Model: {col(model, 'CYAN')}  |  Memories: {col(str(memory_count), 'GREEN')}  |  Tasks: {col(str(tasks), 'YELLOW')}{token_str}",
+        line("─", "GREY"),
+    ]
+    return "\n".join(lines)
+
+# ── Prompts ──
+def prompt_symbol() -> str:
+    return col(f"{THEME['glyph']} ", THEME["accent"])
+
+def prompt_text(model_key: str = "") -> str:
+    model_tag = col(f"[{model_key}]", "YELLOW") + " " if model_key else ""
+    return f"{prompt_symbol()}{col(THEME['prompt'], 'BOLD')} {model_tag}> "
+
+# ── Status / info ──
+def info(text: str) -> str:
+    return col(f"ℹ  {text}", "CYAN")
+
+def success(text: str) -> str:
+    return col(f"✔  {text}", "GREEN")
+
+def warning(text: str) -> str:
+    return col(f"⚠  {text}", "YELLOW")
+
+def error(text: str) -> str:
+    return col(f"✗  {text}", "RED")
+
+def thinking(text: str) -> str:
+    return col(f"⟳  {text}", "BLUE")
+
+def debug(text: str) -> str:
+    return col(f"🐛 {text}", "GREY")
+
+# ── Progress bar ──
+def progress_bar(current: int, total: int, width: int = 40, label: str = "") -> str:
+    """Render a simple progress bar."""
+    if total == 0:
+        return ""
+    ratio = min(current / total, 1.0)
+    filled = int(width * ratio)
+    bar = col("█" * filled, "GREEN") + col("░" * (width - filled), "GREY")
+    percent = int(ratio * 100)
+    label_str = f" {label}" if label else ""
+    return f"[{bar}] {percent}%{label_str}"
+
+# ── Spinner / loading animation ──
+import threading
+
+class Spinner:
+    """Threaded terminal spinner — shows while VAEL is thinking.
+
+    TTY-aware: when stdout is NOT a terminal (an unattended forge run piped to a log),
+    the animation is SUPPRESSED — it prints the message once and nothing more. This is
+    what stops a log filling with thousands of carriage-return spinner frames (the
+    overnight run wrote 324KB of '⠋ thinking…' spam). Fixed 2026-06-27.
+    """
+    _chars = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
+
+    def __init__(self, message: str = "thinking…"):
+        self.message = message
+        self._running = False
+        self._thread: threading.Thread | None = None
+        self._idx = 0
+        self._tty = sys.stdout.isatty()
+        self._chars = _SPINNERS.get(THEME.get("spinner", "braille"), self._chars)
+
+    def _spin(self):
+        while self._running:
+            char = self._chars[self._idx % len(self._chars)]
+            self._idx += 1
+            line_str = f"\r{col(char, 'CYAN')}  {col(self.message, 'GREY')}  "
+            sys.stdout.write(line_str)
+            sys.stdout.flush()
+            threading.Event().wait(0.08)
+        # Clear line on stop
+        sys.stdout.write("\r" + " " * (len(self.message) + 10) + "\r")
+        sys.stdout.flush()
+
+    def __enter__(self):
+        if not self._tty:
+            # Non-interactive (logged) run: one quiet line, no animation, no spam.
+            print(col(f"  · {self.message}", "GREY"), flush=True)
+            return self
+        self._running = True
+        self._thread = threading.Thread(target=self._spin, daemon=True)
+        self._thread.start()
+        return self
+
+    def __exit__(self, *args):
+        if not self._tty:
+            return
+        self._running = False
+        if self._thread:
+            self._thread.join(timeout=0.3)
+
+    def tick(self) -> str:
+        char = self._chars[self._idx % len(self._chars)]
+        self._idx += 1
+        return f"{col(char, 'CYAN')} {self.message}"
+
+
+# ── Typewriter — clean live typing (TTY only; instant when logged) ──
+def typewriter(text: str, colour: str = "CYAN", cps: int = None):
+    """Type text out character-by-character for a clean live feel. In a non-TTY
+    (logged/unattended) run it prints instantly — no per-char flushing into a file.
+    cps = characters per second."""
+    if not text:
+        return
+    if cps is None:
+        cps = THEME.get("typewriter_cps", 900)
+    if not sys.stdout.isatty():
+        print(col(text, colour) if colour else text)
+        return
+    delay = 1.0 / max(cps, 1)
+    pre = getattr(C, colour, "") if colour else ""
+    sys.stdout.write(pre)
+    for ch in text:
+        sys.stdout.write(ch)
+        sys.stdout.flush()
+        if ch not in " \n":
+            time.sleep(delay)
+    sys.stdout.write(C.RESET + "\n")
+    sys.stdout.flush()
+
+
+# ── Live task list — the forge ladder as a panel ──
+def forge_panel(rungs: List[Tuple[str, str, str]], title: str = "FORGE — LIVE TASK LIST",
+                level: str = "", model: str = "") -> str:
+    """Render the live task list. Each rung is (marker, status, text) where status is
+    one of: PASS, ACTIVE, QUEUED, LOCKED, FAIL. Shows a progress bar + the next reaches.
+
+        ◆ FORGE — LIVE TASK LIST            Level 3 — CODE · deepseek-r1
+        [██████░░░░░░░░░░] 35%  ·  7/20 reached
+          ✓ Iter 1  BOOT — load constitution, list walls
+          ▶ Iter 8  CODE — write & run python that reads caps   ← now
+          ○ Iter 9  SELF-EDIT — add a comment, compile, diff
+          · Iter 10 SNAPSHOT — auto-snapshot before edits   (locked)
+    """
+    icon = {"PASS": col("✓", "GREEN"), "ACTIVE": col("▶", "CYAN"),
+            "QUEUED": col("○", "YELLOW"), "LOCKED": col("·", "GREY"),
+            "FAIL": col("✗", "RED")}
+    done = sum(1 for _, s, _ in rungs if s == "PASS")
+    total = len(rungs) or 1
+    out = [line("═", "PURPLE")]
+    head = col(f"  ◆ {title}", "PURPLE")
+    meta = "  ".join(p for p in (level, model) if p)
+    out.append(head + (col(f"        {meta}", "GREY") if meta else ""))
+    out.append("  " + progress_bar(done, total, width=18) + col(f"  ·  {done}/{total} reached", "GREY"))
+    out.append(line("─", "GREY"))
+    # show: all PASS collapsed to a count if many, then the window around ACTIVE
+    active_idx = next((i for i, (_, s, _) in enumerate(rungs) if s == "ACTIVE"), done)
+    lo = max(0, active_idx - 1)
+    hi = min(len(rungs), active_idx + 5)
+    if lo > 0:
+        out.append(col(f"    … {lo} earlier reaches", "GREY"))
+    for i in range(lo, hi):
+        mk, status, text = rungs[i]
+        tag = " ← now" if status == "ACTIVE" else ("  (locked)" if status == "LOCKED" else "")
+        body = f"  {icon.get(status, '·')} {mk:<9} {text[:54]}"
+        out.append(col(body, "BOLD") + col(tag, "CYAN") if status == "ACTIVE" else body + col(tag, "GREY"))
+    if hi < len(rungs):
+        out.append(col(f"    … {len(rungs) - hi} more rungs queued", "GREY"))
+    out.append(line("═", "PURPLE"))
+    return "\n".join(out)
+
+# ── Model list table ──
+def model_table(models: List[Tuple[str, str, str]]) -> str:
+    """Render a table of models: (key, provider, description)."""
+    if not models:
+        return ""
+    w = term_width()
+    max_key = max(len(k) for k, _, _ in models)
+    out = [line("─", "GREY"), col("  Available models:", "BOLD")]
+    for key, prov, desc in models:
+        out.append(f"  {col(key.ljust(max_key), 'CYAN')}  {col(prov, 'GREY')}  {desc}")
+    out.append(line("─", "GREY"))
+    return "\n".join(out)
+
+# ── Task list ──
+def task_list(tasks: List[Tuple[str, str, str]]) -> str:
+    """Render a list of tasks: (id, description, status)."""
+    if not tasks:
+        return col("  (no tasks)", "GREY")
+    out = [col("  Open tasks:", "BOLD")]
+    for tid, desc, status in tasks:
+        colour = "GREEN" if status == "done" else "YELLOW"
+        out.append(f"  [{col(status, colour)}] {desc} ({col(tid, 'CYAN')})")
+    return "\n".join(out)
+
+# ── Crash report summary ──
+def crash_summary(crashes: List[dict]) -> str:
+    if not crashes:
+        return ""
+    out = [warning(f"{len(crashes)} unresolved crash(es) from previous sessions:")]
+    for c in crashes:
+        out.append(f"  • {col(c['timestamp'], 'CYAN')} — {c['error_type']}: {c['error_msg'][:60]}")
+    return "\n".join(out)
+
+# ── File diff / code block ──
+def code_block(text: str, language: str = "python") -> str:
+    """Wrap text in a styled code block."""
+    lines = text.splitlines()
+    out = [col(f"  ┌─ {language} ─{'─' * 40}", "GREY")]
+    for ln in lines:
+        out.append(f"  {col('│', 'GREY')} {ln}")
+    out.append(col(f"  └─{'─' * 50}", "GREY"))
+    return "\n".join(out)
+
+def file_diff(old_lines: List[str], new_lines: List[str], filename: str = "") -> str:
+    """Render a simple diff between two lists of lines."""
+    out = []
+    if filename:
+        out.append(col(f"  ◆ {filename}", "CYAN"))
+    for i, (old, new) in enumerate(zip(old_lines, new_lines)):
+        if old != new:
+            out.append(f"  {col('-', 'RED')} {old}")
+            out.append(f"  {col('+', 'GREEN')} {new}")
+    # Handle additions
+    if len(new_lines) > len(old_lines):
+        for new in new_lines[len(old_lines):]:
+            out.append(f"  {col('+', 'GREEN')} {new}")
+    return "\n".join(out) if out else col("  (no changes)", "GREY")
+
+# ── Timestamp / log line ──
+def log_line(timestamp: str, level: str, message: str) -> str:
+    """Render a log-style line."""
+    level_colours = {
+        "INFO": "CYAN",
+        "WARN": "YELLOW",
+        "ERROR": "RED",
+        "DEBUG": "GREY",
+        "SUCCESS": "GREEN",
+    }
+    colour = level_colours.get(level.upper(), "GREY")
+    return f"{col(timestamp, 'GREY')} [{col(level.upper(), colour)}] {message}"
+
+# ── Footer ──
+def footer() -> str:
+    return col(f"  Type /help for commands  ·  {datetime.now().strftime('%Y-%m-%d %H:%M')}", "GREY")
+
+# ── Section header ──
+def section_header(title: str, char: str = "─", colour: str = "PURPLE") -> str:
+    """Render a section header with title."""
+    w = term_width()
+    title_str = f" {title} "
+    pad = (w - len(title_str)) // 2
+    return col(title_str.center(w, char), colour)
+
+# ── Compact status line ──
+def status_line(items: List[Tuple[str, str]]) -> str:
+    """Render a compact status line of key-value pairs."""
+    parts = []
+    for key, value in items:
+        parts.append(f"{col(key, 'GREY')}: {col(value, 'CYAN')}")
+    return "  |  ".join(parts)
+
+# ── Session token counter ──
+def session_tokens_display(tokens: dict) -> str:
+    """Render a compact session token total, e.g. 'Σ ↑12.4k ↓3.2k'."""
+    def fmt(n):
+        if n >= 1_000_000:
+            return f"{n/1_000_000:.1f}M"
+        elif n >= 1_000:
+            return f"{n/1_000:.1f}k"
+        return str(n)
+    p = fmt(tokens.get("prompt", 0))
+    c = fmt(tokens.get("completion", 0))
+    return col(f"Σ ↑{p} ↓{c}", "DIM")
